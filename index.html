@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>PLivo API Reference</title>
+    <title>PLivo Phone APIs</title>
 
     <style>
       .highlight table td { padding: 5px; }
@@ -91,7 +91,7 @@
       <script src="javascripts/all.js"></script>
   </head>
 
-  <body class="index" data-languages="[&quot;shell&quot;,&quot;ruby&quot;,&quot;python&quot;,&quot;javascript&quot;]">
+  <body class="index" data-languages="[&quot;JSON Response&quot;]">
     <a href="#" id="nav-button">
       <span>
         NAV
@@ -101,10 +101,7 @@
     <div class="tocify-wrapper">
       <img src="images/logo.png" alt="Logo" />
         <div class="lang-selector">
-              <a href="#" data-language-name="shell">shell</a>
-              <a href="#" data-language-name="ruby">ruby</a>
-              <a href="#" data-language-name="python">python</a>
-              <a href="#" data-language-name="javascript">javascript</a>
+              <a href="#" data-language-name="JSON Response">JSON Response</a>
         </div>
         <div class="search">
           <input type="text" class="search" id="input-search" placeholder="Search">
@@ -113,8 +110,7 @@
       <div id="toc">
       </div>
         <ul class="toc-footer">
-            <li><a href='#'>Sign Up for a Developer Key</a></li>
-            <li><a href='https://github.com/tripit/slate'>Documentation Powered by Slate</a></li>
+            <li><span class="copyright">© 2017 Plivo Inc.</span></li>
         </ul>
     </div>
     <div class="page-wrapper">
@@ -122,227 +118,847 @@
       <div class="content">
         <h1 id="introduction">Introduction</h1>
 
-<p>Welcome to the Kittn API! You can use our API to access Kittn API endpoints, which can get information on various cats, kittens, and breeds in our database.</p>
+<p>Welcome to the Plivo Phone Number APIs!
+Plivo exposes a list of REST APIs to perform various actions on phone numbers.
+The base URL for all API requests is</p>
 
-<p>We have language bindings in Shell, Ruby, and Python! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.</p>
+<p><code class="prettyprint">https://api.plivo.com/v1/</code></p>
 
-<p>This example API documentation page was created with <a href="https://github.com/tripit/slate">Slate</a>. Feel free to edit it and use it as a base for your own API&rsquo;s documentation.</p>
+<p>You can view JSON response samples in the dark area to the right.</p>
 
-<h1 id="authentication">Authentication</h1>
+<h2 id="authentication">Authentication</h2>
 
-<blockquote>
-<p>To authorize, use this code:</p>
-</blockquote>
-<pre class="highlight ruby"><code><span class="nb">require</span> <span class="s1">'kittn'</span>
+<p>All requests to Plivo API are authenticated with Basic Auth using your AUTH ID and AUTH TOKEN Your Plivo AUTH ID and AUTH TOKEN can be found when you login to your <a href="https://manage.plivo.com/dashboard/">dashboard</a>.
+<img src="images/auth_id_auth_token.png" alt="Auth id auth token" /></p>
 
-<span class="n">api</span> <span class="o">=</span> <span class="no">Kittn</span><span class="o">::</span><span class="no">APIClient</span><span class="p">.</span><span class="nf">authorize!</span><span class="p">(</span><span class="s1">'meowmeowmeow'</span><span class="p">)</span>
-</code></pre><pre class="highlight python"><code><span class="kn">import</span> <span class="nn">kittn</span>
+<h2 id="content-type">Content Type</h2>
 
-<span class="n">api</span> <span class="o">=</span> <span class="n">kittn</span><span class="o">.</span><span class="n">authorize</span><span class="p">(</span><span class="s">'meowmeowmeow'</span><span class="p">)</span>
-</code></pre><pre class="highlight shell"><code><span class="c"># With shell, you can just pass the correct header with each request</span>
-curl <span class="s2">"api_endpoint_here"</span>
-  -H <span class="s2">"Authorization: meowmeowmeow"</span>
-</code></pre><pre class="highlight javascript"><code><span class="kr">const</span> <span class="nx">kittn</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'kittn'</span><span class="p">);</span>
+<p>Plivo only accepts input of the type application/json. All POST requests arguments must be passed as json with the Content-Type set as application/json.</p>
 
-<span class="kd">let</span> <span class="nx">api</span> <span class="o">=</span> <span class="nx">kittn</span><span class="p">.</span><span class="nx">authorize</span><span class="p">(</span><span class="s1">'meowmeowmeow'</span><span class="p">);</span>
-</code></pre>
-<blockquote>
-<p>Make sure to replace <code class="prettyprint">meowmeowmeow</code> with your API key.</p>
-</blockquote>
+<p>All GET and DELETE request arguments must be passed in the query string.</p>
 
-<p>Kittn uses API keys to allow access to the API. You can register a new Kittn API key at our <a href="http://example.com/developers">developer portal</a>.</p>
-
-<p>Kittn expects for the API key to be included in all API requests to the server in a header that looks like the following:</p>
-
-<p><code class="prettyprint">Authorization: meowmeowmeow</code></p>
-
-<aside class="notice">
-You must replace <code>meowmeowmeow</code> with your personal API key.
-</aside>
-
-<h1 id="kittens">Kittens</h1>
-
-<h2 id="get-all-kittens">Get All Kittens</h2>
-<pre class="highlight ruby"><code><span class="nb">require</span> <span class="s1">'kittn'</span>
-
-<span class="n">api</span> <span class="o">=</span> <span class="no">Kittn</span><span class="o">::</span><span class="no">APIClient</span><span class="p">.</span><span class="nf">authorize!</span><span class="p">(</span><span class="s1">'meowmeowmeow'</span><span class="p">)</span>
-<span class="n">api</span><span class="p">.</span><span class="nf">kittens</span><span class="p">.</span><span class="nf">get</span>
-</code></pre><pre class="highlight python"><code><span class="kn">import</span> <span class="nn">kittn</span>
-
-<span class="n">api</span> <span class="o">=</span> <span class="n">kittn</span><span class="o">.</span><span class="n">authorize</span><span class="p">(</span><span class="s">'meowmeowmeow'</span><span class="p">)</span>
-<span class="n">api</span><span class="o">.</span><span class="n">kittens</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
-</code></pre><pre class="highlight shell"><code>curl <span class="s2">"http://example.com/api/kittens"</span>
-  -H <span class="s2">"Authorization: meowmeowmeow"</span>
-</code></pre><pre class="highlight javascript"><code><span class="kr">const</span> <span class="nx">kittn</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'kittn'</span><span class="p">);</span>
-
-<span class="kd">let</span> <span class="nx">api</span> <span class="o">=</span> <span class="nx">kittn</span><span class="p">.</span><span class="nx">authorize</span><span class="p">(</span><span class="s1">'meowmeowmeow'</span><span class="p">);</span>
-<span class="kd">let</span> <span class="nx">kittens</span> <span class="o">=</span> <span class="nx">api</span><span class="p">.</span><span class="nx">kittens</span><span class="p">.</span><span class="nx">get</span><span class="p">();</span>
-</code></pre>
-<blockquote>
-<p>The above command returns JSON structured like this:</p>
-</blockquote>
-<pre class="highlight json"><code><span class="p">[</span><span class="w">
-  </span><span class="p">{</span><span class="w">
-    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Fluffums"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"breed"</span><span class="p">:</span><span class="w"> </span><span class="s2">"calico"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"fluffiness"</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"cuteness"</span><span class="p">:</span><span class="w"> </span><span class="mi">7</span><span class="w">
-  </span><span class="p">},</span><span class="w">
-  </span><span class="p">{</span><span class="w">
-    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Max"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"breed"</span><span class="p">:</span><span class="w"> </span><span class="s2">"unknown"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"fluffiness"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"cuteness"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="w">
-  </span><span class="p">}</span><span class="w">
-</span><span class="p">]</span><span class="w">
-</span></code></pre>
-<p>This endpoint retrieves all kittens.</p>
-
-<h3 id="http-request">HTTP Request</h3>
-
-<p><code class="prettyprint">GET http://example.com/api/kittens</code></p>
-
-<h3 id="query-parameters">Query Parameters</h3>
-
-<table><thead>
-<tr>
-<th>Parameter</th>
-<th>Default</th>
-<th>Description</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>include_cats</td>
-<td>false</td>
-<td>If set to true, the result will also include cats.</td>
-</tr>
-<tr>
-<td>available</td>
-<td>true</td>
-<td>If set to false, the result will include kittens that have already been adopted.</td>
-</tr>
-</tbody></table>
-
-<aside class="success">
-Remember — a happy kitten is an authenticated kitten!
-</aside>
-
-<h2 id="get-a-specific-kitten">Get a Specific Kitten</h2>
-<pre class="highlight ruby"><code><span class="nb">require</span> <span class="s1">'kittn'</span>
-
-<span class="n">api</span> <span class="o">=</span> <span class="no">Kittn</span><span class="o">::</span><span class="no">APIClient</span><span class="p">.</span><span class="nf">authorize!</span><span class="p">(</span><span class="s1">'meowmeowmeow'</span><span class="p">)</span>
-<span class="n">api</span><span class="p">.</span><span class="nf">kittens</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-</code></pre><pre class="highlight python"><code><span class="kn">import</span> <span class="nn">kittn</span>
-
-<span class="n">api</span> <span class="o">=</span> <span class="n">kittn</span><span class="o">.</span><span class="n">authorize</span><span class="p">(</span><span class="s">'meowmeowmeow'</span><span class="p">)</span>
-<span class="n">api</span><span class="o">.</span><span class="n">kittens</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-</code></pre><pre class="highlight shell"><code>curl <span class="s2">"http://example.com/api/kittens/2"</span>
-  -H <span class="s2">"Authorization: meowmeowmeow"</span>
-</code></pre><pre class="highlight javascript"><code><span class="kr">const</span> <span class="nx">kittn</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'kittn'</span><span class="p">);</span>
-
-<span class="kd">let</span> <span class="nx">api</span> <span class="o">=</span> <span class="nx">kittn</span><span class="p">.</span><span class="nx">authorize</span><span class="p">(</span><span class="s1">'meowmeowmeow'</span><span class="p">);</span>
-<span class="kd">let</span> <span class="nx">max</span> <span class="o">=</span> <span class="nx">api</span><span class="p">.</span><span class="nx">kittens</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
-</code></pre>
-<blockquote>
-<p>The above command returns JSON structured like this:</p>
-</blockquote>
+<h2 id="asynchronous-request">Asynchronous Request</h2>
 <pre class="highlight json"><code><span class="p">{</span><span class="w">
-  </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Max"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"breed"</span><span class="p">:</span><span class="w"> </span><span class="s2">"unknown"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"fluffiness"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"cuteness"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="w">
+    </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"async api spawned"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"api_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"63f0761a-e0ed-11e1-8ea7-12313924e3a6"</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
-<p>This endpoint retrieves a specific kitten.</p>
+<p>All requests to Plivo API can be made asynchronous by adding the parameters listed below. When an asynchronous call is made, Plivo will return a generic response with the api_id and the API responses will be sent to the callback URL.</p>
 
-<aside class="warning">Inside HTML code blocks like this one, you can&rsquo;t use Markdown, so use <code>&lt;code&gt;</code> blocks to denote code.</aside>
+<h3 id="arguments">Arguments</h3>
 
-<h3 id="http-request">HTTP Request</h3>
+<table>
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>callback_url</td>
+            <td>The URL notified by the API response is available and to which the response is sent.</td>
+        </tr>
+        <tr>
+            <td>callback_method</td>
+            <td>The method used to notify the callback_url. Defaults to POST.</td>
+        </tr>
+    </tbody>
+</table>
 
-<p><code class="prettyprint">GET http://example.com/kittens/&lt;ID&gt;</code></p>
+<h2 id="api-response">API Response</h2>
 
-<h3 id="url-parameters">URL Parameters</h3>
+<blockquote>
+<p>Success</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"api_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"97ceeb52-58b6-11e1-86da-77300b68f8bb"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"call fired"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"request_uuid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"75b26856-8638-11e0-802c-6d99d509954e"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<blockquote>
+<p>Error</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"api_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"97ceeb52-58b6-11e1-86da-77300b68f8bb"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"error"</span><span class="p">:</span><span class="w"> </span><span class="s2">"answer_url parameter is missing"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"request_uuid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"56hf4856-8638-11e0-802c-65j6gd39954e"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>All Plivo APIs return a response in json format. An api_id is set in each response to uniquely identify your request. The API returns one of the following HTTP status codes.</p>
 
-<table><thead>
-<tr>
-<th>Parameter</th>
-<th>Description</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>ID</td>
-<td>The ID of the kitten to retrieve</td>
-</tr>
-</tbody></table>
+<table>
+    <thead>
+        <tr>
+            <th>Status Code</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>200</td>
+            <td>Request has been executed</td>
+        </tr>
+        <tr>
+            <td>201</td>
+            <td>Resource created</td>
+        </tr>
+        <tr>
+            <td>202</td>
+            <td>Resource changed</td>
+        </tr>
+        <tr>
+            <td>204</td>
+            <td>Resource deleted</td>
+        </tr>
+        <tr>
+            <td>400</td>
+            <td>A parameter is missing or is invalid</td>
+        </tr>
+        <tr>
+            <td>401</td>
+            <td>Authentication failed</td>
+        </tr>
+        <tr>
+            <td>404</td>
+            <td>Resource cannot be found</td>
+        </tr>
+        <tr>
+            <td>405</td>
+            <td>HTTP method not allowed</td>
+        </tr>
+        <tr>
+            <td>500</td>
+            <td>Server error</td>
+        </tr>
+    </tbody>
+</table>
 
-          <h1 id="errors">Errors</h1>
+<h3 id="response-attributes">Response Attributes</h3>
 
-<aside class="notice">This error section is stored in a separate file in `includes/_errors.md`. Slate allows you to optionally separate out your docs into many files&hellip;just save them to the `includes` folder and add them to the top of your `index.md`&rsquo;s frontmatter. Files are included in the order listed.</aside>
+<table>
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>api_id</td>
+            <td>Identifies the request.</td>
+        </tr>
+        <tr>
+            <td>error</td>
+            <td>Indicates there is an error and provides information regarding the error.</td>
+        </tr>
+        <tr>
+            <td>message</td>
+            <td>Provides information regarding request.</td>
+        </tr>
+    </tbody>
+</table>
 
-<p>The Kittn API uses the following error codes:</p>
+<h1 id="number-apis">Number APIs</h1>
 
-<table><thead>
-<tr>
-<th>Error Code</th>
-<th>Meaning</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>400</td>
-<td>Bad Request &ndash; Your request sucks</td>
-</tr>
-<tr>
-<td>401</td>
-<td>Unauthorized &ndash; Your API key is wrong</td>
-</tr>
-<tr>
-<td>403</td>
-<td>Forbidden &ndash; The kitten requested is hidden for administrators only</td>
-</tr>
-<tr>
-<td>404</td>
-<td>Not Found &ndash; The specified kitten could not be found</td>
-</tr>
-<tr>
-<td>405</td>
-<td>Method Not Allowed &ndash; You tried to access a kitten with an invalid method</td>
-</tr>
-<tr>
-<td>406</td>
-<td>Not Acceptable &ndash; You requested a format that isn&rsquo;t json</td>
-</tr>
-<tr>
-<td>410</td>
-<td>Gone &ndash; The kitten requested has been removed from our servers</td>
-</tr>
-<tr>
-<td>418</td>
-<td>I&rsquo;m a teapot</td>
-</tr>
-<tr>
-<td>429</td>
-<td>Too Many Requests &ndash; You&rsquo;re requesting too many kittens! Slow down!</td>
-</tr>
-<tr>
-<td>500</td>
-<td>Internal Server Error &ndash; We had a problem with our server. Try again later.</td>
-</tr>
-<tr>
-<td>503</td>
-<td>Service Unavailable &ndash; We&rsquo;re temporarially offline for maintanance. Please try again later.</td>
-</tr>
-</tbody></table>
+<p>BaseURI: <code class="prettyprint">https://api.plivo.com/v1/Account/{auth_id}/Number/</code></p>
+
+<p>The following actions can be performed using the Number APIs.</p>
+
+<h2 id="list-all-rented-numbers">List All Rented Numbers</h2>
+
+<blockquote>
+<p>HTTP Status Code: 200</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+    </span><span class="nt">"api_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"114de006-1c95-11e4-8a4a-123140008edf"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"meta"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"limit"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"next"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/v1/Account/MANWVLYTK4ZWU1YTY4ZT/Number/?limit=3&amp;offset=3"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"offset"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"previous"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"total_count"</span><span class="p">:</span><span class="w"> </span><span class="mi">20</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nt">"objects"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="nt">"added_on"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2014-08-05"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"alias"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"application"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/v1/Account/MANWVLYTK4ZWU1YTY4ZT/Application/29986316244302815/"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"carrier"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Plivo"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"monthly_rental_rate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.80000"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"number"</span><span class="p">:</span><span class="w"> </span><span class="s2">"18135401302"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"number_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"local"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"region"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Florida, UNITED STATES"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"resource_uri"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/v1/Account/MANWVLYTK4ZWU1YTY4ZT/Number/18135401302/"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"sms_enabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"sms_rate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.00000"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"sub_account"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"voice_enabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"voice_rate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.00850"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="nt">"added_on"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2013-01-01"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"alias"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"application"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/v1/Account/MANWVLYTK4ZWU1YTY4ZT/Application/16632559604105954/"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"carrier"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Plivo"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"monthly_rental_rate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.80000"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"number"</span><span class="p">:</span><span class="w"> </span><span class="s2">"14153661106"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"number_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"local"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"region"</span><span class="p">:</span><span class="w"> </span><span class="s2">"BELVEDERE, UNITED STATES"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"resource_uri"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/v1/Account/MANWVLYTK4ZWU1YTY4ZT/Number/14153661106/"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"sms_enabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"sms_rate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.00000"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"sub_account"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"voice_enabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"voice_rate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.00850"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="nt">"added_on"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2013-03-25"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"alias"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"application"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/v1/Account/MANWVLYTK4ZWU1YTY4ZT/Application/20372631212782799/"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"carrier"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Plivo"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"monthly_rental_rate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.80000"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"number"</span><span class="p">:</span><span class="w"> </span><span class="s2">"14152753408"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"number_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"local"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"region"</span><span class="p">:</span><span class="w"> </span><span class="s2">"California, UNITED STATES"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"resource_uri"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/v1/Account/MANWVLYTK4ZWU1YTY4ZT/Number/14152753408/"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"sms_enabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"sms_rate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.00000"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"sub_account"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"voice_enabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"voice_rate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.00850"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>This API lets you list of numbers rented on Plivo and numbers added to your account.</p>
+
+<p><code class="prettyprint">GET https://api.plivo.com/v1/Account/{auth_id}/Number/</code></p>
+
+<h3 id="arguments">Arguments</h3>
+
+<table>
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>type</td>
+            <td>The type of number you are filtering. You can filter by local and tollfree numbers. Defaults to a local number.</td>
+        </tr>
+        <tr>
+            <td>number_startswith</td>
+            <td>Used to specify the beginning of the number. For example, if the number &lsquo;24&rsquo; is specified, the API will fetch only those numbers beginning with '24&rsquo;.</td>
+        </tr>
+        <tr>
+            <td>subaccount</td>
+            <td>Requires the auth_id of the subaccount as input. If this parameter is included in the request, all numbers of the particular subaccount are displayed.</td>
+        </tr>
+        <tr>
+            <td>alias</td>
+            <td>This is a name given to the number. The API will fetch only those numbers with the alias specified.</td>
+        </tr>
+        <tr>
+            <td>services</td>
+            <td>Filters out phone numbers according to the services you want from that number. The following values are valid:
+                <ul>
+                    <li>voice - Returns a list of numbers that provide 'voice&rsquo; services. Additionally, if the numbers offer both 'voice&rsquo; and 'sms&rsquo;, they are also listed.
+                        <b>Note</b> - This option <b>does not</b> exclusively list those services that provide both voice and sms .</li>
+                    <li>voice,sms - Returns a list of numbers that provide both 'voice&rsquo; and 'sms&rsquo; services.</li>
+                    <li>sms - Returns a list of numbers that provide only 'sms&rsquo; services.</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td>limit</td>
+            <td>Used to display the number of results per page. The maximum number of results that can be fetched is 20.
+            </td>
+        </tr>
+        <tr>
+            <td>offset</td>
+            <td>Denotes the number of value items by which the results should be offset. Eg:- If the result contains a 1000 values and limit is set to 10 and
+                offset is set to 705, then values 706 through 715 are displayed in the results. This parameter is also used for pagination of the results.
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<h3 id="response-attributes">Response Attributes</h3>
+
+<dl>
+    <dt>added_on</dt>
+    <dd>string
+    <span>The date on which the number was rented on your account. The date format is <code>YYYY-MM-DD</code></span>
+    </dd>
+
+    <dt>alias</dt>
+    <dd>string
+    <span>A friendly name for your Plivo number.</span>
+    </dd>
+
+    <dt>carrier</dt>
+    <dd>string
+    <span>The carrier which is linked to this number. This can either be a Plivo carrier or a custom carrier added
+    using the <a href="https://www.plivo.com/docs/api/incomingcarrier/">IncomingCarrier API</a>.</span>
+    </dd>
+
+    <dt>monthly_rental_rate</dt>
+    <dd>string
+    <span>The monthly rental for this number in USD.</span>
+    </dd>
+
+    <dt>number</dt>
+    <dd>string
+    <span>The phone number itself.</span>
+    </dd>
+
+    <dt>number_type</dt>
+    <dd>string
+    <span>The type of the number. The values can be 'local&rsquo;, 'tollfree&rsquo; and 'national&rsquo;</span>
+    </dd>
+
+    <dt>region</dt>
+    <dd>string
+    <span>The region, with the city and the country this number belongs to.</span>
+    </dd>
+
+    <dt>sms_enabled</dt>
+    <dd>boolean
+    <span>Lets you know if the number is SMS enabled. If the value
+    returned is 'true&rsquo;, then you will be able to receive SMS on this number.</span>
+    </dd>
+
+    <dt>sms_rate</dt>
+    <dd>string
+    <span>The cost of receiving an SMS on the number in USD.</span>
+    </dd>
+
+    <dt>voice_enabled</dt>
+    <dd>boolean
+    <span>Lets you know if the number is voice enabled. If the value
+    returned is 'true&rsquo;, then you will be able to receive calls on this number.</span>
+    </dd>
+
+    <dt>voice_rate</dt>
+    <dd>string
+    <span>The cost of receiving a voice call on this number per minute in USD.</span>
+    </dd>
+
+    <dt>subaccount</dt>
+    <dd>string
+    <span>The subaccount associated with the number. If the number belongs to the main
+    parent account, this value will be <code>null</code>.</span>
+    </dd>
+</dl>
+
+<h2 id="get-details-of-a-rented-number">Get Details of a Rented Number</h2>
+
+<blockquote>
+<p>HTTP Status Code: 200</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+    </span><span class="nt">"added_on"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2014-02-14"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"alias"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"api_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"88625e5e-1c92-11e4-80aa-12313f048015"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"application"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/v1/Account/MANWVLYTK4ZWU1YTY4ZT/Application/29986316244302815/"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"carrier"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Plivo"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"monthly_rental_rate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.80000"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"number"</span><span class="p">:</span><span class="w"> </span><span class="s2">"17609915566"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"number_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"local"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"region"</span><span class="p">:</span><span class="w"> </span><span class="s2">"California, UNITED STATES"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"resource_uri"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/v1/Account/MANWVLYTK4ZWU1YTY4ZT/Number/17609915566/"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"sms_enabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"sms_rate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.00000"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"sub_account"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"voice_enabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"voice_rate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.00850"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>This API lets you get details of a single number on your Plivo account.</p>
+
+<p><code class="prettyprint">GET https://api.plivo.com/v1/Account/{auth_id}/Number/{number}/</code>`</p>
+
+<h3 id="arguments">Arguments</h3>
+
+<p>None</p>
+
+<p>Response Attributes</p>
+
+<dl>
+    <dt>added_on</dt>
+    <dd>string
+    <span>The date on which the number was rented on your account. The date format is <code>YYYY-MM-DD</code></span>
+    </dd>
+
+    <dt>alias</dt>
+    <dd>string
+    <span>A friendly name for your Plivo number.</span>
+    </dd>
+
+    <dt>application</dt>
+    <dd>string
+    <span>The Plivo application linked to the number.</span>
+    </dd>
+
+    <dt>carrier</dt>
+    <dd>string
+    <span>The carrier which is linked to this number. This can either be a Plivo carrier or a custom carrier added
+    using the <a href="/docs/api/incomingcarrier/">IncomingCarrier API</a>.</span>
+    </dd>
+
+    <dt>monthly_rental_rate</dt>
+    <dd>string
+    <span>The monthly rental for this number in USD.</span>
+    </dd>
+
+    <dt>number</dt>
+    <dd>string
+    <span>The phone number itself.</span>
+    </dd>
+
+    <dt>number_type</dt>
+    <dd>string
+    <span>The type of the number. The values can be 'local&rsquo;, 'tollfree&rsquo; and 'national&rsquo;</span>
+    </dd>
+
+    <dt>region</dt>
+    <dd>string
+    <span>The region, with the city and the country this number belongs to.</span>
+    </dd>
+
+    <dt>sms_enabled</dt>
+    <dd>boolean
+    <span>Lets you know if the number is SMS enabled. If the value
+    returned is 'true&rsquo;, then you will be able to receive SMS on this number.</span>
+    </dd>
+
+    <dt>sms_rate</dt>
+    <dd>string
+    <span>The cost of receiving an SMS on the number in USD.</span>
+    </dd>
+
+    <dt>voice_enabled</dt>
+    <dd>boolean
+    <span>Lets you know if the number is voice enabled. If the value
+    returned is 'true&rsquo;, then you will be able to receive calls on this number.</span>
+    </dd>
+
+    <dt>voice_rate</dt>
+    <dd>string
+    <span>The cost of receiving a voice call on this number per minute in USD.</span>
+    </dd>
+
+    <dt>subaccount</dt>
+    <dd>string
+    <span>The subaccount associated with the number. If the number belongs to the main
+    parent account, this value will be <code>null</code>.</span>
+    </dd>
+</dl>
+
+<h2 id="add-a-number-from-your-own-carrier">Add a number from your own carrier</h2>
+
+<blockquote>
+<p>HTTP Status Code: 202</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"changed"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"api_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5a9fcb68-582d-11e1-86da-6ff39efcb949"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>This API enables you to add a number of your own carrier.</p>
+
+<p><code class="prettyprint">POST https://api.plivo.com/v1/Account/{auth_id}/Number/</code></p>
+
+<h3 id="arguments">Arguments</h3>
+
+<table>
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>numbers (mandatory)</td>
+            <td>A comma separated list of numbers that need to be added for
+            the carrier. Make sure that you configure the numbers to point
+            to the sip server @sbc.plivo.com. Eg: If the number
+            you own from your carrier is 18554675486 then the sip address
+            it needs to point to is 18554675486@sbc.plivo.com</td>
+        </tr>
+        <tr>
+            <td>carrier (mandatory)</td>
+            <td>The carrier_id of the IncomingCarrier that the number is
+            associated with. For more information, check our
+            <a href="https://www.plivo.com/docs/api/incomingcarrier/">IncomingCarrier API</a></td>
+        </tr>
+        <tr>
+            <td>region (mandatory)</td>
+            <td>This is the region that is associated with the Number.
+            You can use it to organize numbers based on the area they are from.</td>
+        </tr>
+        <tr>
+            <td>number_type (optional)</td>
+            <td>This field does not impact the way Plivo uses this number.
+            It is primarily adding more information about your number. You may
+            use this field to categorize between local and tollfree numbers. Default is local.</td>
+        </tr>
+        <tr>
+            <td>app_id (optional)</td>
+            <td>The application id of the application that is to be linked.</td>
+        </tr>
+        <tr>
+            <td>subaccount (optional)</td>
+            <td>The auth_id of the subaccount to which this number should be
+            added. This can only be performed by a main account holder.</td>
+        </tr>
+    </tbody>
+</table>
+
+<h2 id="edit-a-number">Edit a Number</h2>
+
+<blockquote>
+<p>HTTP Status Code: 202</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"changed"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"api_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5a9fcb68-582d-11e1-86da-6ff39efcb949"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>This API enables you to change the application and subaccount associated with a number you rented.</p>
+
+<p><code class="prettyprint">POST https://api.plivo.com/v1/Account/{auth_id}/Number/{number}/</code></p>
+
+<h3 id="arguments">Arguments</h3>
+
+<table>
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>app_id (optional)</td>
+            <td>The application id of the application that is to be linked.
+            If this is set to null, then any existing application is unlinked
+            from the number.</td>
+        </tr>
+        <tr>
+            <td>subaccount (optional)</td>
+            <td>The auth_id of the subaccount to which this number should
+            be added. This can only be performed by a main account holder.</td>
+        </tr>
+        <tr>
+            <td>alias (optional)</td>
+            <td>The textual name given to the number.</td>
+        </tr>
+    </tbody>
+</table>
+
+<h2 id="unrent-a-number">Unrent a Number</h2>
+
+<blockquote>
+<p>HTTP Status Code: 204</p>
+</blockquote>
+
+<p>This API lets you unrent a number on Plivo. This operation cannot be undone.</p>
+
+<p><code class="prettyprint">DELETE https://api.plivo.com/v1/Account/{auth_id}/Number/{number}/</code></p>
+
+<h3 id="arguments">Arguments</h3>
+
+<p>None</p>
+
+<h1 id="phone-number-apis">Phone Number APIs</h1>
+
+<p>BaseURI: <code class="prettyprint">https://api.plivo.com/v1/Account/{auth_id}/PhoneNumber/</code></p>
+
+<p>Using this API you can search for a number based on the number pattern, region and number type. The following actions can be performed with the PhoneNumber API.</p>
+
+<h2 id="search-for-new-numbers">Search for New Numbers</h2>
+
+<blockquote>
+<p>HTTP Status Code: 200</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+    </span><span class="nt">"api_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"859428b0-1c88-11e4-a2d1-22000ac5040c"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"meta"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"limit"</span><span class="p">:</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"next"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"offset"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"previous"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"total_count"</span><span class="p">:</span><span class="w"> </span><span class="mi">9</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+    </span><span class="nt">"objects"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"country"</span><span class="p">:</span><span class="w"> </span><span class="s2">"UNITED STATES"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"lata"</span><span class="p">:</span><span class="w"> </span><span class="mi">722</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"monthly_rental_rate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.80000"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"number"</span><span class="p">:</span><span class="w"> </span><span class="s2">"14154009186"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"fixed"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"prefix"</span><span class="p">:</span><span class="w"> </span><span class="s2">"415"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"rate_center"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SNFC CNTRL"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"region"</span><span class="p">:</span><span class="w"> </span><span class="s2">"United States"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"resource_uri"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/v1/Account/MANWVLYTK4ZWU1YTY4ZT/PhoneNumber/14154009186/"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"restriction"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"restriction_text"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"setup_rate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.00000"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"sms_enabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"sms_rate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.00800"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"voice_enabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"voice_rate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.00500"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"country"</span><span class="p">:</span><span class="w"> </span><span class="s2">"UNITED STATES"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"lata"</span><span class="p">:</span><span class="w"> </span><span class="mi">722</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"monthly_rental_rate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.80000"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"number"</span><span class="p">:</span><span class="w"> </span><span class="s2">"14154009187"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"fixed"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"prefix"</span><span class="p">:</span><span class="w"> </span><span class="s2">"415"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"rate_center"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SNFC CNTRL"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"region"</span><span class="p">:</span><span class="w"> </span><span class="s2">"United States"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"resource_uri"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/v1/Account/MANWVLYTK4ZWU1YTY4ZT/PhoneNumber/14154009187/"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"restriction"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"restriction_text"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"setup_rate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.00000"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"sms_enabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"sms_rate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.00800"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"voice_enabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"voice_rate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.00500"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>This API lets you search for fixed, mobile and tollfree numbers available on Plivo. Searches can be performed based on the country ISO, pattern, number type and region. We return a list of numbers which can then be bought.</p>
+
+<p><code class="prettyprint">GET https://api.plivo.com/v1/Account/{auth_id}/PhoneNumber/</code></p>
+
+<h3 id="arguments">Arguments</h3>
+
+<table>
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>country_iso (mandatory)</td>
+            <td>The ISO code A2 of the country ( BE for Belgium, DE for Germany, GB for United Kingdom, US for United States etc ). See the <a href="http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2">Wikipedia site</a> for a list of ISOs for different countries.
+            </td>
+        </tr>
+        <tr>
+            <td>type (optional)
+            </td>
+            <td>The type of number you are looking for. The possible number types are <code>fixed</code>, <code>mobile</code> and <code>tollfree</code>. Defaults to <code>any</code> if this field is not specified. <code>type</code> also accepts the value <code>any</code>, which will search for all 3 number types.
+            </td>
+        </tr>
+        <tr>
+            <td>pattern (optional)
+            </td>
+            <td>Represents the pattern of the number to be searched. Adding a pattern will search for numbers which start with the country code + pattern. For eg. a pattern of 415 and a country_iso: US will search for numbers starting with 1415.
+            </td>
+        </tr>
+        <tr>
+            <td>region>(optional)</td>
+            <td>This filter is only applicable when the <code>type</code> is fixed. If the <code>type</code> is not provided, it is assumed to be fixed. Region based filtering can be performed with the following terms:
+                <ul>
+                    <li>Exact names of the region: You could use region=Frankfurt if you were looking for a number in Frankfurt. Performed if the search term is three or more characters in length.</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td>services (optional)</td>
+            <td>Filters out phone numbers according to the services you want from that number. The following values are valid:
+                <ul>
+                    <li><code>voice</code> - If this option is selected, it ensures that the results have voice enabled numbers. These numbers may or may not be SMS enabled.</li>
+                    <li><code>voice,sms</code> - If this option is selected, it ensures that the results have both voice and sms enabled on the same number.</li>
+                    <li><code>sms</code> - If this option is selected, it ensures that the results have sms enabled numbers. These numbers may or may not be voice enabled.</li>
+                </ul>
+                By default, numbers that have either voice or sms or both enabled are returned.
+            </td>
+        </tr>
+        <tr>
+            <td>lata (optional)</td>
+            <td>Numbers can be searched using <a href="http://en.wikipedia.org/wiki/Local_access_and_transport_area">Local Access and Transport Area</a>. This filter is applicable only for <code>country_iso</code> US and CA.</td>
+        </tr>
+        <tr>
+            <td>rate_center (optional)</td>
+            <td>Numbers can be searched using <a href="http://en.wikipedia.org/wiki/Telephone_exchange">Rate Center</a>. This filter is application only for <code>country_iso</code> US and CA.</td>
+        </tr>
+        <tr>
+            <td>limit (optional)</td>
+            <td>Used to display the number of results per page. The maximum number of results that can be fetched is 20.
+            </td>
+        </tr>
+        <tr>
+            <td>offset (optional)</td>
+            <td>Denotes the number of value items by which the results should be offset. Eg:- If the result contains a 1000 values and <code>limit</code> is set to 10 and
+                <code>offset</code> is set to 705, then values 706 through 715 are displayed in the results. This parameter is also used for pagination of the results.
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<h3 id="response-attributes">Response Attributes</h3>
+
+<dl>
+    <dt>country</dt>
+    <dd>string
+    <span>The country to which the number belongs to.</span>
+    </dd>
+
+    <dt>lata</dt>
+    <dd>string
+    <span><code>lata</code> represents <a href="http://en.wikipedia.org/wiki/Local_access_and_transport_area">Local access and transport area</a> and will only
+    be present for United States and Canada numbers.</span>
+    </dd>
+
+    <dt>number</dt>
+    <dd>string
+    <span>The phone number which is available on Plivo and can be purchased using the API.</span>
+    </dd>
+
+    <dt>type</dt>
+    <dd>string
+    <span>The type of the number associated with the group. The values can be 'fixed&rsquo;, 'mobile&rsquo; and 'tollfree&rsquo;</span>
+    </dd>
+
+    <dt>prefix</dt>
+    <dd>string
+    <span>The number prefix. This is the area code of the number.</span>
+    </dd>
+
+    <dt>rate_center</dt>
+    <dd>string
+    <span>The <code>rate_center</code> is only available for United States and Canada numbers.</span>
+    </dd>
+
+    <dt>restriction</dt>
+    <dd>string
+    <span>Numbers in some countries will have a restriction, in such a case, you will have to provide a verification
+    document to activate the number after buying it. Numbers can have the following restriction values:
+    <ul>
+    <li><code>city-address</code>: A local city address proof is needed to activate this number.</li>
+    <li><code>country-address</code>: An address proof is needed of the country this number belongs to.</li>
+    <li><code>terms-and-conditions</code>: Your number will be activated without any verification, however you must submit
+    a local address proof whenever Plivo requests for one.</li>
+    <li><code>null</code>: Your number will be activated after buying and no address proof is required.</li>
+    </ul>
+    </span>
+    </dd>
+
+    <dt>restriction_text</dt>
+    <dd>string
+    <span>Contains text which describes the restriction.</span>
+    </dd>
+
+    <dt>region</dt>
+    <dd>string
+    <span>The region, with the city and the country this number belongs to.</span>
+    </dd>
+
+    <dt>monthly_rental_rate</dt>
+    <dd>string
+    <span>The monthly rent in USD for each number. The monthly rent is deducted
+    on the 1st of every month and is pro-rated if the number is purchased any time in the middle of
+    a month. For eg. If the number is bought on 20th of a month, Plivo will charge for the next 10
+    days of the month.</span>
+    </dd>
+
+    <dt>setup_rate</dt>
+    <dd>string
+    <span>The one-time setup cost for the number in USD.</span>
+    </dd>
+
+    <dt>sms_enabled</dt>
+    <dd>boolean
+    <span>Lets you know if the number is SMS enabled. If the value
+    returned is 'true&rsquo;, then you will be able to receive SMS on this number.</span>
+    </dd>
+
+    <dt>sms_rate</dt>
+    <dd>string
+    <span>The cost of receiving an SMS on the number in USD.</span>
+    </dd>
+
+    <dt>voice_enabled</dt>
+    <dd>boolean
+    <span>Lets you know if the number is voice enabled. If the value
+    returned is 'true&rsquo;, then you will be able to receive calls on this number.</span>
+    </dd>
+
+    <dt>voice_rate</dt>
+    <dd>string
+    <span>The cost of receiving a voice call on this number per minute in USD.</span>
+    </dd>
+</dl>
+
+<h2 id="buy-number">Buy Number</h2>
+
+<blockquote>
+<p>HTTP Status Code: 201</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+    </span><span class="nt">"api_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"aa52882c-1c88-11e4-bd8a-12313f016a39"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"created"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"numbers"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="nt">"number"</span><span class="p">:</span><span class="w"> </span><span class="s2">"14154009186"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Success"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">],</span><span class="w">
+    </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"fulfilled"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<blockquote>
+<p>In certain countries where there are address regulations, you will receive a response similar to the following response. We will send an email to your registered account email with the requirements.</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+    </span><span class="nt">"api_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"aa52882c-1c88-11e4-bd8a-12313f016a39"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"created"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"numbers"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="nt">"number"</span><span class="p">:</span><span class="w"> </span><span class="s2">"4969365065273"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"pending"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">],</span><span class="w">
+    </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"fulfilled"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>The number retrieved from the search above should be used as an input to buy the number.</p>
+
+<p><code class="prettyprint">POST https://api.plivo.com/v1/Account/{auth_id}/PhoneNumber/{number}/</code></p>
+
+<h3 id="arguments">Arguments</h3>
+
+<p><table>
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>app_id (optional)</td>
+            <td>The ID of the application that you want assigned to the Number. If not specified, then it is assigned to the default application of the Account.</td>
+        </tr>
+    </tbody>
+</table></p>
 
       </div>
       <div class="dark-box">
           <div class="lang-selector">
-                <a href="#" data-language-name="shell">shell</a>
-                <a href="#" data-language-name="ruby">ruby</a>
-                <a href="#" data-language-name="python">python</a>
-                <a href="#" data-language-name="javascript">javascript</a>
+                <a href="#" data-language-name="JSON Response">JSON Response</a>
           </div>
       </div>
     </div>
